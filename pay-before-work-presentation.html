@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAY BEFORE WORK - Professional Development Workflow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background from Trivia app */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .out-top {
+            animation: rotate 20s linear infinite;
+            transform-origin: 13px 25px;
+        }
+
+        .in-top {
+            animation: rotate 10s linear infinite;
+            transform-origin: 13px 25px;
+        }
+
+        .out-bottom {
+            animation: rotate 25s linear infinite;
+            transform-origin: 84px 93px;
+        }
+
+        .in-bottom {
+            animation: rotate 15s linear infinite;
+            transform-origin: 84px 93px;
+        }
+
+        .presentation {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide {
+            width: 1200px;
+            height: 90vh;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 60px;
+            box-sizing: border-box;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+            text-align: center;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide h1 {
+            font-size: 48px;
+            margin: 0 0 40px 0;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .slide h2 {
+            font-size: 32px;
+            margin: 30px 0 20px 0;
+            color: #e0e0e0;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .slide h3 {
+            font-size: 24px;
+            margin: 25px 0 15px 0;
+            color: #b0b0b0;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .slide p, .slide li {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #c0c0c0;
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .slide ul, .slide ol {
+            margin: 30px 0;
+            padding: 0;
+            list-style: none;
+            max-width: 800px;
+        }
+
+        .slide li {
+            margin: 20px 0;
+            text-align: left;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .slide li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4a90e2;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .title-slide {
+            background: rgba(10, 10, 10, 0.98);
+            animation: slideDown 1s ease-out;
+        }
+
+        .title-slide h1 {
+            font-size: 80px;
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite;
+            background: linear-gradient(135deg, #ffffff 0%, #d0d0d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title-slide .subtitle {
+            font-size: 28px;
+            color: #909090;
+            font-weight: 400;
+            animation: slideUp 1s ease-out 0.3s backwards;
+            margin: 20px 0;
+        }
+
+        .process-box {
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            margin: 30px auto;
+            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            animation: slideUp 0.6s ease-out backwards;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .price-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 18px;
+            margin: 15px;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .warning-box {
+            background: rgba(255, 50, 50, 0.1);
+            border: 2px solid #ff3232;
+            padding: 40px;
+            margin: 30px auto;
+            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            animation: pulse 2s ease-in-out infinite;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .warning-box h2, .warning-box h3 {
+            color: #ff6b6b !important;
+        }
+
+        .yellow-box {
+            background: rgba(253, 204, 38, 0.1);
+            border: 2px solid #fdcc26;
+            padding: 40px;
+            margin: 30px auto;
+            border-radius: 16px;
+            backdrop-filter: blur(15px);
+            animation: pulse 2s ease-in-out infinite;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .yellow-box h2, .yellow-box h3 {
+            color: #fdcc26 !important;
+        }
+
+        .phase-card {
+            background: rgba(25, 25, 25, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 30px auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            animation: slideUp 0.6s ease-out backwards;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(70, 70, 70, 0.8);
+            color: white;
+            border: 1px solid #606060;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(90, 90, 90, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .nav-btn:disabled {
+            background: rgba(40, 40, 40, 0.5);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #606060;
+            font-size: 14px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .flowchart {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-item {
+            background: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid #404040;
+            animation: fadeIn 0.8s ease-out backwards;
+        }
+
+        .flow-item::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            color: #606060;
+        }
+
+        .flow-item:last-child::after {
+            display: none;
+        }
+
+        .emphasis {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Project status indicators */
+        .status-complete {
+            background: rgba(82, 196, 26, 0.2);
+            border-left: 4px solid #52c41a;
+            color: #87d068;
+        }
+
+        .status-wip {
+            background: rgba(250, 173, 20, 0.2);
+            border-left: 4px solid #faad14;
+            color: #ffc53d;
+        }
+
+        .status-question {
+            background: rgba(245, 34, 45, 0.2);
+            border-left: 4px solid #f5222d;
+            color: #ff7875;
+        }
+
+        /* Force emojis to display in natural colors */
+        .slide h1,
+        .slide h2,
+        .slide h3,
+        .slide p {
+            font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+        }
+
+        /* Specific emoji styling */
+        .slide h1 {
+            color: #ffffff !important;
+        }
+
+        .slide h2 {
+            color: #e0e0e0 !important;
+        }
+
+        .slide h3 {
+            color: #b0b0b0 !important;
+        }
+
+        .slide p, .slide li {
+            color: #c0c0c0 !important;
+        }
+
+        /* Simplified content styles */
+        .content-grid {
+            display: grid;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .content-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @media (max-width: 768px) {
+            .slide h1 { font-size: 32px; }
+            .slide h2 { font-size: 24px; }
+            .slide p, .slide li { font-size: 18px; }
+            .flowchart { flex-direction: column; }
+            .flow-item::after {
+                content: '↓';
+                right: 50%;
+                bottom: -20px;
+                top: auto;
+                transform: translateX(50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <svg class="background-animation" preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80">
+        <defs>
+            <style>
+                @keyframes rotate {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                .out-top {
+                    animation: rotate 20s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .in-top {
+                    animation: rotate 10s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .out-bottom {
+                    animation: rotate 25s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+                .in-bottom {
+                    animation: rotate 15s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+            </style>
+        </defs>
+        <path fill="#1a1a1a" class="out-top" d="M37-5C25.1-14.7,5.7-19.1-9.2-10-28.5,1.8-32.7,31.1-19.8,49c15.5,21.5,52.6,22,67.2,2.3C59.4,35,53.7,8.5,37-5Z"/>
+        <path fill="#151515" class="in-top" d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z"/>
+        <path fill="#202020" class="out-bottom" d="M105.9,48.6c-12.4-8.2-29.3-4.8-39.4.8-23.4,12.8-37.7,51.9-19.1,74.1s63.9,15.3,76-5.6c7.6-13.3,1.8-31.1-2.3-43.8C117.6,63.3,114.7,54.3,105.9,48.6Z"/>
+        <path fill="#181818" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
+    </svg>
+
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide active">
+            <div style="font-size: 80px; margin-bottom: 20px;">💰</div>
+            <h1>FUCK YOU<br><span style="font-size: 0.8em;">PAY ME</span></h1>
+            <p class="subtitle">Professional Development Workflow</p>
+            <p class="subtitle" style="margin-top: 30px; font-size: 24px; opacity: 0.7;">Clear Process • Fair Payment • Quality Results</p>
+            <span class="slide-number">1 / 20</span>
+        </div>
+
+        <!-- Slide 2: Video -->
+        <div class="slide">
+            <video controls autoplay muted loop style="width: 100%; height: 80%; object-fit: contain; border-radius: 16px;">
+                <source src="untitled.mov" type="video/mp4">
+                <source src="untitled.mov" type="video/quicktime">
+                Your browser does not support the video tag.
+            </video>
+            <span class="slide-number">2 / 20</span>
+        </div>
+
+        <!-- Slide 3: Rule #1 -->
+        <div class="slide">
+            <h1>🛑  RULE #1</h1>
+            <div class="warning-box" style="margin-top: 60px;">
+                <h2 style="margin: 0; font-size: 48px;">NO WORK WITHOUT PAY</h2>
+                <p style="font-size: 28px; margin-top: 30px; text-align: center;">All outstanding work is paid, first, before anything else is started or completed.</p>
+            </div>
+            <span class="slide-number">3 / 20</span>
+        </div>
+
+        <!-- Slide 3: Unraid Server Projects -->
+        <div class="slide">
+            <h1>🖥️  Hosted on Unraid Server</h1>
+            <div class="phase-card" style="max-width: 1200px; padding-top: 0; padding-bottom: 0;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: left; font-size: 18px;">
+                    <div>
+                        <h3 style="color: #fdcc26; margin-bottom: 20px;">Explorers & Automator</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 15px;">Instagram Explorer<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Facebook Explorer<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">YouTube Explorer<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Podcast Review Explorer<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Jonno Otto IG Explorer<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Story Automator<br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Story Explorer<br>WIP (98%)<br><strong style="color: #ff7875;">Have they paid <em>anything</em> for this?</strong></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="color: #fdcc26; margin-bottom: 20px;">Archives</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 15px;">Instagram Archive<br><strong style="color: #52c41a;">Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Facebook Archive<br><strong style="color: #52c41a;">Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">YouTube Archive<br><strong style="color: #52c41a;">Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                            <li style="margin-bottom: 15px;">Jonno Otto IG Archive<br><strong style="color: #52c41a;">Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">5 / 20</span>
+        </div>
+
+        <!-- Slide 5: Render Deployments -->
+        <div class="slide">
+            <h1>☁️  Hosted on Render</h1>
+            <div class="phase-card">
+                <ul style="text-align: left; font-size: 20px;">
+                    <li><strong>CheckinApp</strong><br><strong style="color: #52c41a;">MVP Complete</strong> • <strong style="color: #ff7875;">Paid?</strong></li>
+                    <li><strong>FormsApp</strong> (WIP, 95%) - Integrates directly into CheckinApp for release forms and event coordination.</li>
+                    <li><strong>TicketingApp</strong> (WIP, 10%) - Platform for ticket sales which requires release form submission before ticket purchase can be finalized.</li>
+                </ul>
+            </div>
+            <span class="slide-number">6 / 20</span>
+        </div>
+
+        <!-- Slide 6: Food for Thought -->
+        <div class="slide">
+            <h1>🤔  Food for thought...</h1>
+            <div class="phase-card" style="text-align: left; font-size: 22px; line-height: 1.6;">
+                <p style="margin-bottom: 25px;">That's <strong style="color: #fdcc26;">14 projects</strong>. 5 Comprehensive social media archives, complete and backed up to their server, and 9 fully fleshed-out apps at 95%+ completion.</p>
+
+                <p style="margin-bottom: 20px;">Did we collect consultation fees?</p>
+                <p style="margin-bottom: 20px;">Did we give them our time (our most valuable resource) for free?</p>
+                <p style="margin-bottom: 20px;">Did we discuss payment for these projects before we started them?</p>
+                <p style="margin-bottom: 20px;">Did we define our project goals?</p>
+
+                <p style="margin-top: 30px; font-weight: 600;">They don't own these apps, unless they pay us what is agreed.</p>
+                <p style="margin-top: 15px; font-weight: 600; color: #fdcc26;">And if there is no agreement, we need to start over there.</p>
+            </div>
+            <span class="slide-number">7 / 20</span>
+        </div>
+
+        <!-- Slide 7: Bare Minimum Requirements -->
+        <div class="slide">
+            <h1>⚖️  Bare Minimum Requirements</h1>
+            <div class="yellow-box" style="margin-top: 40px;">
+                <h2 style="margin: 0;">To Continue Working With This Client</h2>
+            </div>
+            <div class="process-box">
+                <p style="font-size: 24px;">Clear, consistent, ongoing communication of project expectations from the beginning to the end—</p>
+                <p style="font-size: 24px; margin-top: 20px;">Beginning today, we institute a formalized workflow which emphasises planning, professional boundaries, and fair payment terms.</p>
+                <p style="font-size: 24px; margin-top: 20px; color: #52c41a; font-weight: 600;">Key takeaway: We must be paid <em>before</em> any work begins.</p>
+            </div>
+            <span class="slide-number">8 / 20</span>
+        </div>
+
+        <!-- Slide 8: Step 1 - Consultation Fee -->
+        <div class="slide">
+            <h1>📋  Step 1: Schedule Initial Consultation</h1>
+            <div class="phase-card">
+                <p style="font-size: 24px; margin: 25px 0;">The client pays a consultation fee for each project they would like to start (or continue from this point).</p>
+                <div class="price-tag" style="font-size: 28px; margin-top: 20px;">
+                    $1500
+                    <div style="font-size: 14px; font-weight: 400; margin-top: 8px; opacity: 0.9;">Example, negotiable per client</div>
+                </div>
+
+                <div style="background: rgba(253, 204, 38, 0.1); border: 2px solid #fdcc26; border-radius: 16px; padding: 25px; margin-top: 30px;">
+                    <h3 style="margin: 0 0 15px 0; color: #fdcc26;">📝 Costs Agreed & Signed in Writing:</h3>
+                    <ul style="margin: 0; font-size: 18px;">
+                        <li>Cost for initial consultation</li>
+                        <li>Followup consultations</li>
+                        <li>Completed projects</li>
+                        <li>Other fees</li>
+                    </ul>
+                    <p style="margin: 15px 0 0 0; font-weight: 600; color: #fdcc26;">Agreed and signed in writing at beginning of initial consultation.</p>
+                </div>
+            </div>
+            <span class="slide-number">9 / 20</span>
+        </div>
+
+        <!-- Slide 9: Step 2 - Define the Project -->
+        <div class="slide">
+            <h1>🎯  Step 2: Define the Project During Initial Consultation</h1>
+            <div class="phase-card" style="text-align: left;">
+                <h2>📋  Project Scope</h2>
+                <p style="font-size: 24px;">The project's scope will be defined as accurately and comprehensively as possible.</p>
+            </div>
+            <div class="phase-card" style="margin-top: 30px; text-align: left;">
+                <h2>📅  Timelines & Checkpoints</h2>
+                <p style="font-size: 24px;">Expected delivery timelines with progress checkpoints will also be discussed during initial consultation.</p>
+            </div>
+            <span class="slide-number">10 / 20</span>
+        </div>
+
+        <!-- Slide 10: Step 3 - Spec Sheet -->
+        <div class="slide">
+            <h1>📄  Step 3: Project Specification Sheet</h1>
+            <div class="phase-card">
+                <h2><i class="fas fa-clipboard-check" style="color: #fdcc26; font-size: 48px;"></i></h2>
+                <p style="font-size: 24px; margin: 25px 0;">After the initial consultation, a formalized agreement with project specifications (spec sheet) will be drawn by the developer, and signed by both parties before any work begins.</p>
+            </div>
+            <div class="yellow-box">
+                <h3 style="margin: 10px 0;">⚠️  Critical:</h3>
+                <p style="font-size: 26px; margin: 0;">NO work begins until signed by both parties</p>
+            </div>
+            <span class="slide-number">11 / 20</span>
+        </div>
+
+        <!-- Slide 11: Two-Phase Build -->
+        <div class="slide">
+            <h1>🔨  Two-Phase Build</h1>
+            <div class="content-grid" style="grid-template-columns: 1fr 1fr; gap: 60px;">
+                <div class="phase-card">
+                    <div style="font-size: 24px; font-weight: 700; color: #4a90e2; margin-bottom: 10px;">Step 4</div>
+                    <h2 style="color: #4a90e2;">📱 Mockup</h2>
+                    <p>Minimum possible demonstrable app to confirm that the design and functionality matches client expectations</p>
+                </div>
+                <div class="phase-card">
+                    <div style="font-size: 24px; font-weight: 700; color: #52c41a; margin-bottom: 10px;">Step 5</div>
+                    <h2 style="color: #52c41a;">🚀  MVP</h2>
+                    <p>(Minimum Viable Product) The first version of the app that functions and fulfills the project scope</p>
+                </div>
+            </div>
+            <span class="slide-number">12 / 20</span>
+        </div>
+
+        <!-- Slide 12: Step 4 - Mockup Process -->
+        <div class="slide">
+            <h1>🔄  Step 4: Mockup Process</h1>
+            <div class="content-grid" style="grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div class="phase-card" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">🎨</div>
+                    <h3 style="color: #4a90e2; margin-bottom: 15px;">Build Mockup</h3>
+                    <p style="font-size: 18px;">A "Mockup" is built according to the spec sheet and shown to the client.</p>
+                </div>
+                <div class="phase-card" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">👀</div>
+                    <h3 style="color: #ff8c00; margin-bottom: 15px;">Client Review</h3>
+                    <p style="font-size: 18px;">The client has an opportunity to review the mockup and request any design changes, or changes to spec sheet.</p>
+                </div>
+                <div class="phase-card" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">✅</div>
+                    <h3 style="color: #52c41a; margin-bottom: 15px;">Finalize Spec</h3>
+                    <p style="font-size: 18px;">The developer has an opportunity to review the feature change requests, and finalizes the spec sheet with the client.</p>
+                </div>
+            </div>
+            <span class="slide-number">13 / 20</span>
+        </div>
+
+        <!-- Slide 13: Step 4 (continued) - MVP Build -->
+        <div class="slide">
+            <h1>🚀  Step 5: Build & Deploy MVP</h1>
+            <div class="phase-card">
+                <h2>Minimum Viable Product Launch</h2>
+                <p style="font-size: 26px; margin: 25px 0;">An "MVP" is built, tested, and deployed according to the finalized spec sheet.</p>
+            </div>
+            <div style="background: rgba(74, 144, 226, 0.1); border: 2px solid #4a90e2; border-radius: 16px; padding: 30px; margin-top: 30px; text-align: center;">
+                <h3 style="color: #4a90e2;">✅  Once Deployed</h3>
+                <p style="font-size: 24px;">Once deployed, the client reviews the MVP...</p>
+            </div>
+            <span class="slide-number">14 / 20</span>
+        </div>
+
+        <!-- Slide 14: Step 5 - Project Complete -->
+        <div class="slide">
+            <h1>✅  Step 6: Project Complete</h1>
+            <div class="phase-card">
+                <h2>Client Satisfied</h2>
+                <p style="font-size: 26px; margin: 25px 0;">If the client is satisfied with the project, the work is done.</p>
+                <p style="font-size: 24px; margin-top: 20px;">An invoice may be sent for the delivered project, due upon receipt.</p>
+                <div class="price-tag" style="font-size: 24px; margin-top: 20px;">$1499 - $24,999</div>
+            </div>
+            <div style="background: rgba(253, 204, 38, 0.1); border: 2px solid #fdcc26; border-radius: 16px; padding: 30px; margin-top: 30px; text-align: center;">
+                <p style="font-size: 28px; font-weight: 700; color: #fdcc26;">OR...</p>
+            </div>
+            <span class="slide-number">15 / 20</span>
+        </div>
+
+        <!-- Slide 15: Step 7 - Additional Changes -->
+        <div class="slide">
+            <h1>🔄  Step 7: Additional Changes</h1>
+            <div class="phase-card">
+                <h2>Followup Consultation</h2>
+                <p style="font-size: 24px;">If the client has further feature requests or changes they'd like to see, a followup consultation may be scheduled.</p>
+                <div class="price-tag" style="margin-top: 20px;">$499</div>
+            </div>
+            <div class="phase-card" style="margin-top: 30px;">
+                <h2>Iterate Requests</h2>
+                <p style="font-size: 24px;">From the followup consultation, the developer will iterate all requests according to the agreed timeline.</p>
+            </div>
+            <span class="slide-number">16 / 20</span>
+        </div>
+
+        <!-- Slide 16: Steps L-M-N - Repeat Cycle -->
+        <div class="slide">
+            <h1>♻️  Step 8: Iteration Cycle</h1>
+            <div class="content-grid" style="grid-template-columns: repeat(2, 1fr); gap: 40px;">
+                <div class="phase-card" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">✅</div>
+                    <h3 style="color: #52c41a; margin-bottom: 15px;">Changes Complete</h3>
+                    <p style="font-size: 18px;">Client satisfied → Invoice sent</p>
+                    <div class="price-tag" style="font-size: 20px; margin-top: 15px;">$1499 - $24,999</div>
+                </div>
+                <div class="phase-card" style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">🔄</div>
+                    <h3 style="color: #ff8c00; margin-bottom: 15px;">More Changes?</h3>
+                    <p style="font-size: 18px;">Schedule another consultation</p>
+                    <div class="price-tag" style="font-size: 20px; margin-top: 15px;">$499</div>
+                </div>
+            </div>
+            <div class="yellow-box" style="margin-top: 30px;">
+                <p style="font-size: 20px; margin: 0; font-style: italic;">This cycle continues until client is fully satisfied</p>
+            </div>
+            <span class="slide-number">17 / 20</span>
+        </div>
+
+        <!-- Slide 17: Other Terms -->
+        <div class="slide">
+            <h1>⚖️ Other Terms</h1>
+
+            <div class="content-grid" style="grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px;">
+                <div class="phase-card" style="background: rgba(255, 50, 50, 0.1); border: 2px solid #ff3232; text-align: left;">
+                    <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                        <div style="font-size: 40px; margin-right: 20px;">🚫</div>
+                        <h2 style="color: #ff6b6b; margin: 0; font-size: 28px;">Developer Rights</h2>
+                    </div>
+                    <p style="font-size: 24px; line-height: 1.5; margin: 0;">Developer reserves the right to refuse any requests not included in written project specifications within the delivery timeline.</p>
+                </div>
+
+                <div class="phase-card" style="background: rgba(253, 204, 38, 0.1); border: 2px solid #fdcc26; text-align: left;">
+                    <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                        <div style="font-size: 40px; margin-right: 20px;">⏰</div>
+                        <h2 style="color: #fdcc26; margin: 0; font-size: 28px;">Emergency Rate Policy</h2>
+                    </div>
+                    <p style="font-size: 24px; line-height: 1.5; margin: 0;"><strong>Last-minute feature requests may be possible, but must be submitted in writing and will be billed at an emergency hourly rate</strong>, as outlined in agreement.</p>
+                </div>
+
+                <div class="phase-card" style="background: rgba(74, 144, 226, 0.1); border: 2px solid #4a90e2; text-align: left;">
+                    <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                        <div style="font-size: 40px; margin-right: 20px;">📝</div>
+                        <h2 style="color: #4a90e2; margin: 0; font-size: 28px;">Written Notice Requirement</h2>
+                    </div>
+                    <p style="font-size: 24px; line-height: 1.5; margin: 0;"><strong>24 hour turnaround for any emergency feature requests.</strong> That doesn't mean we can't ship faster, it just means we just don't *guarantee* sooner.</p>
+                </div>
+            </div>
+
+            <span class="slide-number">18 / 20</span>
+        </div>
+
+        <!-- Slide 18: Compliance -->
+        <div class="slide">
+            <h1>📜 Compliance & Agreement</h1>
+            <div class="process-box" style="background: rgba(82, 196, 26, 0.1); border: 2px solid #52c41a;">
+                <h1 style="color: #52c41a; margin: 0 0 25px 0;">⚖️ Platform Terms of Service</h1>
+                <p style="font-size: 24px;">Immediate ethical compliance with platform Terms of Service across all social media</p>
+                <p style="font-size: 24px; margin: 20px 0; text-align: center;"><strong><h2>OR</h2></strong></p>
+                <p style="font-size: 24px;">Lease of liability waiver from MM legal</p>
+            </div>
+            <div class="yellow-box" style="margin-top: 40px;">
+                <h2>✍️ Final Requirement</h2>
+                <p style="font-size: 26px; margin-top: 20px;">Agreement does not have to be complicated, but there must be, <span class="emphasis">at minimum</span>, a signed agreement.</p>
+            </div>
+            <span class="slide-number">19 / 20</span>
+        </div>
+
+        <!-- Slide 19: Summary -->
+        <div class="slide">
+            <h1>🎯 Summary</h1>
+            <div class="phase-card">
+                <h2 style="color: #52c41a;">✅ This Workflow Ensures:</h2>
+                <ul style="font-size: 26px;">
+                    <li style="margin: 20px 0;">💰 NO WORK WITHOUT PAY</li>
+                    <li style="margin: 20px 0;">📋 Clear scope defined upfront</li>
+                    <li style="margin: 20px 0;">✍️ Everything in writing & signed</li>
+                    <li style="margin: 20px 0;">⏰ Managed timelines & checkpoints</li>
+                    <li style="margin: 20px 0;">🛡️ Professional boundaries protected</li>
+                </ul>
+            </div>
+            <div class="yellow-box" style="margin-top: 40px;">
+                <h2 style="font-size: 36px;">🛑 Remember: FUCK YOU, PAY ME!</h2>
+            </div>
+            <span class="slide-number">20 / 20</span>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) changeSlide(-1);
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) changeSlide(1);
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
